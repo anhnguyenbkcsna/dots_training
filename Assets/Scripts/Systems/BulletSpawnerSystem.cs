@@ -10,15 +10,19 @@ namespace Systems
     {
         public void OnUpdate(ref SystemState state)
         {
-            var isPressedSpace = Input.GetKeyDown(KeyCode.Space);
-
+            // var isPressedSpace = Input.GetKeyDown(KeyCode.Space);
+            // Spawn continously without press Space...
             foreach (var (tf, spawner)
                      in SystemAPI.Query<RefRO<LocalTransform>, RefRW<BulletSpawnerComponent>>()
                     )
             {
-                if (!isPressedSpace)
+                if (Input.GetKeyDown(KeyCode.Space))
                 {
                     spawner.ValueRW.lastSpawnedTime = 0;
+                }
+                if (Input.GetKeyUp(KeyCode.Space))
+                {
+                    spawner.ValueRW.lastSpawnedTime = spawner.ValueRO.spawnSpeed;
                 }
                 else
                 {
@@ -35,7 +39,7 @@ namespace Systems
                         state.EntityManager.SetComponentData(newBulletE, new BulletComponent
                         {
                             speed =  3f,
-                            direction = calculateDirection(tf),
+                            direction = calculateDirection(tf, ref state),
                         });
                         spawner.ValueRW.lastSpawnedTime = spawner.ValueRO.spawnSpeed;
                     }
@@ -47,10 +51,24 @@ namespace Systems
             }
         }
 
-        private float3 calculateDirection(RefRO<LocalTransform> tf)
+        private float3 calculateDirection(RefRO<LocalTransform> tf, ref SystemState state)
         {
-            //TODO:
-            return new float3(0f, 0f, 1f);
+            // set null direction
+            float3 direction = new float3(0, 0, 1);
+            return direction;
+
+            // query the character
+            foreach (var (characterTf, character) in SystemAPI
+                         .Query<RefRO<LocalTransform>, RefRO<ControlledMovingComponent>>())
+            {
+                // query the firepoint
+                foreach (var (firepointTf, firepoint) in SystemAPI
+                             .Query<RefRO<LocalTransform>, RefRO<BulletSpawnerComponent>>())
+                {
+                    // calculate the direction 
+                    direction = characterTf.ValueRO.Position - firepointTf.ValueRO.Position;
+                }
+            }
         }
     }
 }

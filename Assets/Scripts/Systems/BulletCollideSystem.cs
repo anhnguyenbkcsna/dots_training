@@ -9,19 +9,34 @@ namespace Systems
     {
         public void OnUpdate(ref SystemState state)
         {
-            return;
-            foreach (var (tf, bullet)
-                     in SystemAPI.Query<RefRO<LocalTransform>, RefRW<BulletComponent>>())
+            // return;
+            // Entity enemy = null;
+            foreach (var (bullettf, bullet, bulletEntity) in SystemAPI.Query<RefRO<LocalTransform>, RefRW<BulletComponent>>().WithEntityAccess())
             {
+                float distanceToNearestEnemy = math.INFINITY;
+                Entity nearestEnemy = Entity.Null;
                 //find nearest enemy move to job
-                var f1 = new float3();
-                var f2 = new float3();
-              var dist =  math.distancesq(f1, f2);
-              if (dist <= bullet.ValueRO.minDistance)
-              {
-                  //collide
-                  //add component "collided" {bullet, enemy}
-              }
+                foreach (var (enemytf, enemy, enemyEntity) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<EnemyComponent>>().WithEntityAccess())
+                {
+                    float distanceToEnemy = math.distancesq(bullettf.ValueRO.Position, enemytf.ValueRO.Position);
+                    if (distanceToEnemy < distanceToNearestEnemy)
+                    {
+                        distanceToNearestEnemy = distanceToEnemy;
+                        nearestEnemy = enemyEntity;
+                    }
+                }
+                
+                // var f1 = new float3();
+                // var f2 = new float3();
+                // var dist =  math.distancesq(f1, f2);
+                if (distanceToNearestEnemy <= bullet.ValueRO.minDistance && nearestEnemy != Entity.Null)
+                {
+                    //add component "collided" {bullet, enemy}
+                    state.EntityManager.SetComponentData(bulletEntity, new ColliderComponent
+                    {
+                        entityA = bulletEntity, entityB = nearestEnemy
+                    });
+                }
             }
         }
     }
