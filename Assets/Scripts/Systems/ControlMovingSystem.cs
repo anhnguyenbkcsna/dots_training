@@ -9,11 +9,11 @@ namespace Systems
     {
         public void OnUpdate(ref SystemState state)
         {
-            var horizontolInput = Input.GetAxis("Horizontal");
+            var horizontalInput = Input.GetAxis("Horizontal");
             foreach (var (tf, moving, range) in SystemAPI.Query<RefRW<LocalTransform>
                          , RefRO<MovingComponent>, RefRO<MovingRange>>().WithAll<ControlledMovingComponent>())
             {
-                tf.ValueRW.Position.x +=  horizontolInput*moving.ValueRO.moveSpeed * SystemAPI.Time.DeltaTime;
+                tf.ValueRW.Position.x +=  horizontalInput*moving.ValueRO.moveSpeed * SystemAPI.Time.DeltaTime;
                 if (tf.ValueRW.Position.x < range.ValueRO.minX)
                 {
                     tf.ValueRW.Position.x = range.ValueRO.minX;

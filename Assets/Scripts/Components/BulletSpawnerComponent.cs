@@ -12,7 +12,7 @@ namespace Components
 
         public float lastSpawnedTime;
 
-        public float3 offset;
+        // public float3 offset;
 
     }
 }

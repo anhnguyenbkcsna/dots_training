@@ -1,21 +1,24 @@
-﻿using Unity.Burst;
-using Unity.Collections;
+﻿using Components;
 using Unity.Entities;
 
-namespace Components
+namespace Systems
 {
     public partial struct ColliderSystem : ISystem
     {
-        [BurstCompile]
+        public void OnCreate(ref SystemState state)
+        {
+            // Wait until the collider
+            state.RequireForUpdate<HpReduce>();
+        }
         public void OnUpdate(ref SystemState state)
         {
-            EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
-            
+            // Query the objects have HpReduce component, set new HP by reduce hpReduce
+            foreach (var (entity, Reduce) in SystemAPI.Query<RefRW<HpEntity>, RefRO<HpReduce>>())
+            {
+                entity.ValueRW.HP = entity.ValueRW.HP - Reduce.ValueRO.hpReduce;
+            }
         }
         
-        // public partial struct ColliderJob : IJobEntity
-        // {
-        //     void Execute()
-        // }
     }
+    
 }

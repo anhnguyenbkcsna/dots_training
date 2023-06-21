@@ -10,37 +10,33 @@ namespace Systems
     {
         public void OnUpdate(ref SystemState state)
         {
-            // var isPressedSpace = Input.GetKeyDown(KeyCode.Space);
-            // Spawn continously without press Space...
+            var isPressedSpace = Input.GetKey(KeyCode.Space);
             foreach (var (tf, spawner)
-                     in SystemAPI.Query<RefRO<LocalTransform>, RefRW<BulletSpawnerComponent>>()
-                    )
+                     in SystemAPI.Query<RefRO<LocalTransform>, RefRW<BulletSpawnerComponent>>())
             {
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (!isPressedSpace)
                 {
+                    // press Space
                     spawner.ValueRW.lastSpawnedTime = 0;
-                }
-                if (Input.GetKeyUp(KeyCode.Space))
-                {
-                    spawner.ValueRW.lastSpawnedTime = spawner.ValueRO.spawnSpeed;
                 }
                 else
                 {
                     if (spawner.ValueRO.lastSpawnedTime <= 0)
                     {
-                        //Spawn Bullet
+                        // Spawn Bullet
                         var newBulletE = state.EntityManager.Instantiate(spawner.ValueRO.prefab);
                         state.EntityManager.SetComponentData(newBulletE, new LocalTransform
                         {
-                            Position = tf.ValueRO.Position + spawner.ValueRO.offset,
+                            Position = tf.ValueRO.Position,
                             Scale = 1f,
                             Rotation = Quaternion.identity,
                         });
                         state.EntityManager.SetComponentData(newBulletE, new BulletComponent
                         {
                             speed =  3f,
-                            direction = calculateDirection(tf, ref state),
+                            direction = CalculateDirection(tf),
                         });
+                        // set cooldown time for bullet spawner.
                         spawner.ValueRW.lastSpawnedTime = spawner.ValueRO.spawnSpeed;
                     }
                     else
@@ -51,24 +47,10 @@ namespace Systems
             }
         }
 
-        private float3 calculateDirection(RefRO<LocalTransform> tf, ref SystemState state)
+        private float3 CalculateDirection(RefRO<LocalTransform> tf)
         {
-            // set null direction
-            float3 direction = new float3(0, 0, 1);
-            return direction;
-
-            // query the character
-            foreach (var (characterTf, character) in SystemAPI
-                         .Query<RefRO<LocalTransform>, RefRO<ControlledMovingComponent>>())
-            {
-                // query the firepoint
-                foreach (var (firepointTf, firepoint) in SystemAPI
-                             .Query<RefRO<LocalTransform>, RefRO<BulletSpawnerComponent>>())
-                {
-                    // calculate the direction 
-                    direction = characterTf.ValueRO.Position - firepointTf.ValueRO.Position;
-                }
-            }
+            // return the forward direction of spawner
+            return tf.ValueRO.Forward();
         }
     }
 }

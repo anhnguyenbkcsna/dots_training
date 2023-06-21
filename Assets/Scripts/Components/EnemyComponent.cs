@@ -2,7 +2,7 @@ using Unity.Entities;
 
 namespace Components
 {
-    public struct EnemyComponent:IComponentData
+    public struct EnemyComponent:IComponentData, IEnableableComponent
     {
         
     }

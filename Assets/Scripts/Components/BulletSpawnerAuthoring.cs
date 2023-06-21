@@ -9,7 +9,8 @@ namespace Components
         public float Speed = 4f;
         public float SpawnSpeed = 2f;
 
-        public Vector3 Offset = new Vector3(0f, 1f, 0f);
+        // Dont need offset, fire at firepoint 
+        // public Vector3 Offset = new Vector3(0f, 1f, 0f);
 
         public class BulletSpawnerComponentBaker : Baker<BulletSpawnerAuthoring>
         {
@@ -20,7 +21,6 @@ namespace Components
                     new BulletSpawnerComponent
                     {
                         prefab = GetEntity(authoring.Prefab, TransformUsageFlags.Dynamic), speed = authoring.Speed, spawnSpeed = authoring.SpawnSpeed
-                        , offset = authoring.Offset
                     });
             }
         }
