@@ -18,10 +18,10 @@ namespace Systems
                 _ecb.DestroyEntity(entity);
             }
 
-            foreach (var (hpComponent, e) in SystemAPI.Query<RefRO<HpEntity>>().WithEntityAccess())
+            foreach (var (enemyComponent, e) in SystemAPI.Query<RefRO<EnemyComponent>>().WithEntityAccess())
             {
                 
-                if (hpComponent.ValueRO.HP <= 0f)
+                if (enemyComponent.ValueRO.HP <= 0f)
                 {
                     _ecb.DestroyEntity(e);
                 }

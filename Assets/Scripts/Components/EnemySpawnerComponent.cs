@@ -7,5 +7,8 @@ namespace Components
     {
         public int NumberOfEnemy;
         public Entity Prefab;
+        public float SpawnRate;
+        public bool Rectangle;
+        public bool Line;
     }
 }

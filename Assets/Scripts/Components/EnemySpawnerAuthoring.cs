@@ -7,6 +7,9 @@ namespace Components
     {
         public GameObject prefab;
         public int NumberOfEnemy;
+        public float SpawnRate;
+        public bool Rectangle;
+        public bool Line;
         public class EnemySpawnerComponentBaker : Baker<EnemySpawnerAuthoring>
         {
             public override void Bake(EnemySpawnerAuthoring authoring)
@@ -16,7 +19,10 @@ namespace Components
                     new EnemySpawnerComponent
                     {
                         NumberOfEnemy = authoring.NumberOfEnemy,
-                        Prefab = GetEntity(authoring.prefab, TransformUsageFlags.Dynamic)
+                        Prefab = GetEntity(authoring.prefab, TransformUsageFlags.Dynamic),
+                        SpawnRate = authoring.SpawnRate,
+                        Rectangle = authoring.Rectangle,
+                        Line = authoring.Line
                     });
             }
         }
