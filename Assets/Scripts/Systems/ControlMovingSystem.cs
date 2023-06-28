@@ -14,13 +14,13 @@ namespace Systems
                          , RefRO<MovingComponent>, RefRO<MovingRange>>().WithAll<ControlledMovingComponent>())
             {
                 tf.ValueRW.Position.x +=  horizontalInput*moving.ValueRO.moveSpeed * SystemAPI.Time.DeltaTime;
-                if (tf.ValueRW.Position.x < range.ValueRO.minX)
+                if (tf.ValueRW.Position.x < range.ValueRO.minAxis)
                 {
-                    tf.ValueRW.Position.x = range.ValueRO.minX;
+                    tf.ValueRW.Position.x = range.ValueRO.minAxis;
                 }
-                if (tf.ValueRW.Position.x > range.ValueRO.maxX)
+                if (tf.ValueRW.Position.x > range.ValueRO.maxAxis)
                 {
-                    tf.ValueRW.Position.x = range.ValueRO.maxX;
+                    tf.ValueRW.Position.x = range.ValueRO.maxAxis;
                 }
             }
         }

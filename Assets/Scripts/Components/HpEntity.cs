@@ -4,6 +4,6 @@ namespace Components
 {
     public struct HpEntity : IComponentData
     {
-        public int HP;
+        public float HP;
     }
 }

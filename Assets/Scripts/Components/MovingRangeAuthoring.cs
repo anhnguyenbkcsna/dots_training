@@ -13,7 +13,7 @@ namespace Components
             public override void Bake(MovingRangeAuthoring authoring)
             {
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
-                AddComponent(entity, new MovingRange { minX = authoring.MinX, maxX = authoring.MaxX });
+                AddComponent(entity, new MovingRange { minAxis = authoring.MinX, maxAxis = authoring.MaxX });
             }
         }
     }

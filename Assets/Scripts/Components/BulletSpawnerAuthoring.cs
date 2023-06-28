@@ -6,8 +6,8 @@ namespace Components
     public class BulletSpawnerAuthoring : MonoBehaviour
     {
         public GameObject Prefab;
-        public float Speed = 4f;
-        public float SpawnSpeed = 2f;
+        public float Speed = 50f;
+        public float SpawnSpeed = 0.5f;
 
         // Dont need offset, fire at firepoint 
         // public Vector3 Offset = new Vector3(0f, 1f, 0f);

@@ -9,40 +9,6 @@ namespace Systems
     [UpdateAfter(typeof(SimulationSystemGroup))] // Simulate then calculate collision
     public partial struct BulletCollideSystem:ISystem
     {
-        // public void OnUpdate(ref SystemState state)
-        // {
-        //     // return;
-        //     // Entity enemy = null;
-        //     foreach (var (bullettf, bullet, bulletEntity) in SystemAPI.Query<RefRO<LocalTransform>, RefRW<BulletComponent>>().WithEntityAccess())
-        //     {
-        //         float distanceToNearestEnemy = math.INFINITY;
-        //         Entity nearestEnemy = Entity.Null;
-        //         //find nearest enemy move to job
-        //         foreach (var (enemytf, enemy, enemyEntity) in SystemAPI.Query<RefRO<LocalTransform>, RefRO<EnemyComponent>>().WithEntityAccess())
-        //         {
-        //             float distanceToEnemy = math.distancesq(bullettf.ValueRO.Position, enemytf.ValueRO.Position);
-        //             if (distanceToEnemy < distanceToNearestEnemy)
-        //             {
-        //                 distanceToNearestEnemy = distanceToEnemy;
-        //                 nearestEnemy = enemyEntity;
-        //             }
-        //         }
-        //         
-        //         // var f1 = new float3();
-        //         // var f2 = new float3();
-        //         // var dist =  math.distancesq(f1, f2);
-        //         if (distanceToNearestEnemy <= bullet.ValueRO.minDistance && nearestEnemy != Entity.Null)
-        //         {
-        //             //add component "collided" {bullet, enemy}
-        //             state.EntityManager.AddComponent<ColliderComponent>(bulletEntity);
-        //             // set Collider Entity
-        //             state.EntityManager.SetComponentData(bulletEntity, new ColliderComponent
-        //             {
-        //                 entityA = bulletEntity, entityB = nearestEnemy
-        //             });
-        //         }
-        //     }
-        // }
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<EnemyComponent>();
@@ -51,13 +17,13 @@ namespace Systems
         }
         public struct JobCheckCollision: ITriggerEventsJob
         {
-            public ComponentLookup<EnemyComponent> EnemyLookup;
+            public ComponentLookup<EnemyComponent> TargetLookup;
             public ComponentLookup<BulletComponent> BulletLookup;
             public EntityCommandBuffer Ecb;
             // Support func for Execute
-            public bool IsEnemy(Entity e)
+            public bool IsTarget(Entity e)
             {
-                return EnemyLookup.HasComponent(e);
+                return TargetLookup.HasComponent(e);
             }
             public bool IsBullet(Entity e)
             {
@@ -66,47 +32,64 @@ namespace Systems
 
             public void Execute(TriggerEvent triggerEvent)
             {
-                var isEnemyA = IsEnemy(triggerEvent.EntityA);
-                var isEnemyB = IsEnemy(triggerEvent.EntityB);
+                var isEnemyA = IsTarget(triggerEvent.EntityA);
+                var isEnemyB = IsTarget(triggerEvent.EntityB);
                 
                 var isBulletA = IsBullet(triggerEvent.EntityA);
                 var isBulletB = IsBullet(triggerEvent.EntityB);
 
                 bool destroyableA = false;
+                bool changeMatA = false;
                 bool destroyableB = false;
+                bool changeMatB = false;
                 
                 if ((isEnemyA && isBulletB) || (isEnemyB && isBulletA))
                 {
                     if (isEnemyA)
                     {
-                        if (EnemyLookup.IsComponentEnabled(triggerEvent.EntityA))
+                        if (TargetLookup.IsComponentEnabled(triggerEvent.EntityA))
                         {
-                            // Set Component ReduceHP and HPdata
-                            // Ecb.AddComponent(triggerEvent.EntityA, new HpReduce
-                            // {
-                            //     
-                            // });
-                            Ecb.AddComponent<HpReduce>(triggerEvent.EntityA);
+                            
+                            Entity temp = Ecb.CreateEntity();
+                            Ecb.AddComponent(temp, new DamageComponent
+                            {
+                                TargetEntity = triggerEvent.EntityA,
+                                BulletEntity = triggerEvent.EntityB
+                            });
+                            changeMatA = true;
+                            // destroyableA = true;
                         }
                     }
                     else
                     {
-                        if (EnemyLookup.IsComponentEnabled(triggerEvent.EntityB))
+                        if (TargetLookup.IsComponentEnabled(triggerEvent.EntityB))
                         {
-                            EnemyLookup.SetComponentEnabled(triggerEvent.EntityB, false);
+                            TargetLookup.SetComponentEnabled(triggerEvent.EntityB, false);
+
+                            Entity temp = Ecb.CreateEntity();
+                            Ecb.AddComponent(temp, new DamageComponent
+                            {
+                                TargetEntity = triggerEvent.EntityB,
+                                BulletEntity = triggerEvent.EntityA
+                            });
+                            changeMatB = true;
+                            // destroyableB = true;
                         }
 
                     }
-                    
-                    
-                    // Set Disable for Bullet
+                    // Set Disable for Bullet, then the Bullet will disappear
                     if (isBulletA)
                     {
                         if (BulletLookup.IsComponentEnabled(triggerEvent.EntityA))
                         {
                             BulletLookup.SetComponentEnabled(triggerEvent.EntityA, false);
                         }
-
+                        Entity temp = Ecb.CreateEntity();
+                        Ecb.AddComponent(temp, new DamageComponent
+                        {
+                            TargetEntity = triggerEvent.EntityB,
+                            BulletEntity = triggerEvent.EntityA
+                        });
                         destroyableA = true;
                     }
                     else
@@ -116,9 +99,14 @@ namespace Systems
                             BulletLookup.SetComponentEnabled(triggerEvent.EntityB, false);
 
                         }
+                        Entity temp = Ecb.CreateEntity();
+                        Ecb.AddComponent(temp, new DamageComponent
+                        {
+                            TargetEntity = triggerEvent.EntityA,
+                            BulletEntity = triggerEvent.EntityB
+                        });
                         destroyableB = true;
                     }
-                    
                 }
             
                 // Add component Destroy for DestroySystem
@@ -131,6 +119,17 @@ namespace Systems
                 {
                     Ecb.AddComponent<DestroyComponent>(triggerEvent.EntityB);
                 }
+
+                // Change material
+                if (changeMatA)
+                {
+                    Ecb.AddComponent<ChangeMatMeshTag>(triggerEvent.EntityA);
+                }
+
+                if (changeMatB)
+                {
+                    Ecb.AddComponent<ChangeMatMeshTag>(triggerEvent.EntityB);
+                }
             }
         }
 
@@ -139,7 +138,7 @@ namespace Systems
             EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
             state.Dependency = new JobCheckCollision
             {
-                EnemyLookup = state.GetComponentLookup<EnemyComponent>(),
+                TargetLookup = state.GetComponentLookup<EnemyComponent>(),
                 BulletLookup = state.GetComponentLookup<BulletComponent>(),
                 Ecb = ecb
             }.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);

@@ -2,6 +2,7 @@
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 namespace Systems
 {
@@ -17,6 +18,14 @@ namespace Systems
                 _ecb.DestroyEntity(entity);
             }
 
+            foreach (var (hpComponent, e) in SystemAPI.Query<RefRO<HpEntity>>().WithEntityAccess())
+            {
+                
+                if (hpComponent.ValueRO.HP <= 0f)
+                {
+                    _ecb.DestroyEntity(e);
+                }
+            }
             _ecb.Playback(state.EntityManager);
             _ecb.Dispose();
         }
