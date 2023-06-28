@@ -1,4 +1,5 @@
 ﻿using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Components
@@ -8,8 +9,9 @@ namespace Components
         public GameObject prefab;
         public int NumberOfEnemy;
         public float SpawnRate;
-        public bool Rectangle;
-        public bool Line;
+        public float Rows;
+        public float3 startPoint;
+        public float3 endPoint;
         public class EnemySpawnerComponentBaker : Baker<EnemySpawnerAuthoring>
         {
             public override void Bake(EnemySpawnerAuthoring authoring)
@@ -21,8 +23,9 @@ namespace Components
                         NumberOfEnemy = authoring.NumberOfEnemy,
                         Prefab = GetEntity(authoring.prefab, TransformUsageFlags.Dynamic),
                         SpawnRate = authoring.SpawnRate,
-                        Rectangle = authoring.Rectangle,
-                        Line = authoring.Line
+                        Rows = authoring.Rows,
+                        startPoint = authoring.startPoint,
+                        endPoint = authoring.endPoint
                     });
             }
         }

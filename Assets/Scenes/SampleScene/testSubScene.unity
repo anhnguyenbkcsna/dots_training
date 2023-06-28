@@ -261,10 +261,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8483076755818164738, guid: 920d61d5b52ac634788888375c2d7632, type: 3}
-  NumberOfEnemy: 3
-  SpawnRate: 5
-  Rectangle: 0
-  Line: 1
+  NumberOfEnemy: 5
+  SpawnRate: 1000
+  Rows: 2
+  startPoint:
+    x: 0
+    y: 0
+    z: -5
+  endPoint:
+    x: 10
+    y: 0
+    z: 0
 --- !u!1001 &6866965891080559369
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -8,7 +8,8 @@ namespace Components
         public int NumberOfEnemy;
         public Entity Prefab;
         public float SpawnRate;
-        public bool Rectangle;
-        public bool Line;
+        public float Rows;
+        public float3 startPoint;
+        public float3 endPoint;
     }
 }
