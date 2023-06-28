@@ -65,10 +65,10 @@ namespace Systems
         public float Rows;
         public EntityCommandBuffer Ecb;
         public Entity Prefab;
-        
         // Pass reference to run once ? Cause there is only 1 EnemySpawnerComponent
         private void Execute(EnemySpawnerComponent enemySpawnerComponent)
         {
+            // Debug.Log(DistanceX);
             for (float row = 0f; row < Rows; row++)
             {
                 for (float i = 0f; i < EnemyPerRow; i++)
