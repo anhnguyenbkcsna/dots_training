@@ -20,6 +20,8 @@ namespace Systems
             public ComponentLookup<EnemyComponent> TargetLookup;
             public ComponentLookup<BulletComponent> BulletLookup;
             public EntityCommandBuffer Ecb;
+
+            public float Damage;
             // Support func for Execute
             public bool IsTarget(Entity e)
             {
@@ -50,11 +52,11 @@ namespace Systems
                         if (TargetLookup.IsComponentEnabled(triggerEvent.EntityA))
                         {
                             
-                            Entity temp = Ecb.CreateEntity();
-                            Ecb.AddComponent(temp, new DamageComponent
+                            Ecb.AddComponent(triggerEvent.EntityA, new DamageComponent
                             {
-                                TargetEntity = triggerEvent.EntityA,
-                                BulletEntity = triggerEvent.EntityB
+                                Damage = Damage
+                                // TargetEntity = triggerEvent.EntityA,
+                                // BulletEntity = triggerEvent.EntityB
                             });
                             changeMatA = true;
                             // destroyableA = true;
@@ -64,18 +66,15 @@ namespace Systems
                     {
                         if (TargetLookup.IsComponentEnabled(triggerEvent.EntityB))
                         {
-                            TargetLookup.SetComponentEnabled(triggerEvent.EntityB, false);
-
-                            Entity temp = Ecb.CreateEntity();
-                            Ecb.AddComponent(temp, new DamageComponent
+                            Ecb.AddComponent(triggerEvent.EntityB, new DamageComponent
                             {
-                                TargetEntity = triggerEvent.EntityB,
-                                BulletEntity = triggerEvent.EntityA
+                                Damage = Damage
+                                // TargetEntity = triggerEvent.EntityB,
+                                // BulletEntity = triggerEvent.EntityA
                             });
                             changeMatB = true;
                             // destroyableB = true;
                         }
-
                     }
                     // Set Disable for Bullet, then the Bullet will disappear
                     if (isBulletA)
@@ -84,12 +83,6 @@ namespace Systems
                         {
                             BulletLookup.SetComponentEnabled(triggerEvent.EntityA, false);
                         }
-                        Entity temp = Ecb.CreateEntity();
-                        Ecb.AddComponent(temp, new DamageComponent
-                        {
-                            TargetEntity = triggerEvent.EntityB,
-                            BulletEntity = triggerEvent.EntityA
-                        });
                         destroyableA = true;
                     }
                     else
@@ -97,14 +90,7 @@ namespace Systems
                         if (BulletLookup.IsComponentEnabled(triggerEvent.EntityB))
                         {
                             BulletLookup.SetComponentEnabled(triggerEvent.EntityB, false);
-
                         }
-                        Entity temp = Ecb.CreateEntity();
-                        Ecb.AddComponent(temp, new DamageComponent
-                        {
-                            TargetEntity = triggerEvent.EntityA,
-                            BulletEntity = triggerEvent.EntityB
-                        });
                         destroyableB = true;
                     }
                 }
@@ -136,11 +122,13 @@ namespace Systems
         public void OnUpdate(ref SystemState state)
         {
             EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.TempJob);
+            var config = SystemAPI.GetSingleton<Config>();
             state.Dependency = new JobCheckCollision
             {
                 TargetLookup = state.GetComponentLookup<EnemyComponent>(),
                 BulletLookup = state.GetComponentLookup<BulletComponent>(),
-                Ecb = ecb
+                Ecb = ecb,
+                Damage = config.PlayerDamage
             }.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
             
             // Wait until the Dependency complete task.

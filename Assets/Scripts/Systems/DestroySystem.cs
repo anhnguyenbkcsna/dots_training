@@ -10,7 +10,7 @@ namespace Systems
     {
         public void OnUpdate(ref SystemState state)
         {
-            EntityCommandBuffer _ecb = new EntityCommandBuffer(Allocator.TempJob);
+            EntityCommandBuffer _ecb = new EntityCommandBuffer(Allocator.Temp);
 
             // Access each entity has DestroyComponent and Destroy using ecb.
             foreach (var (destroyComponent, entity) in SystemAPI.Query<RefRO<DestroyComponent>>().WithEntityAccess() )
@@ -18,14 +18,14 @@ namespace Systems
                 _ecb.DestroyEntity(entity);
             }
 
-            foreach (var (enemyComponent, e) in SystemAPI.Query<RefRO<EnemyComponent>>().WithEntityAccess())
-            {
-                
-                if (enemyComponent.ValueRO.HP <= 0f)
-                {
-                    _ecb.DestroyEntity(e);
-                }
-            }
+            // foreach (var (enemyComponent, e) in SystemAPI.Query<RefRO<EnemyComponent>>().WithEntityAccess())
+            // {
+            //     
+            //     if (enemyComponent.ValueRO.HP <= 0f)
+            //     {
+            //         _ecb.DestroyEntity(e);
+            //     }
+            // }
             _ecb.Playback(state.EntityManager);
             _ecb.Dispose();
         }

@@ -1,15 +1,23 @@
 ﻿using Components;
+using Unity.Collections;
 using Unity.Entities;
 
 public partial struct CalculateDamageSystem : ISystem
 {
     public void OnUpdate(ref SystemState state)
     {
-        var config = SystemAPI.GetSingleton<Config>();
-        foreach (var (dmgComponent, enemyComponent) in SystemAPI.Query<RefRW<DamageComponent>, RefRW<EnemyComponent>>())
+        EntityCommandBuffer ecb = new EntityCommandBuffer(Allocator.Temp);
+        foreach (var (enemyComponent, dmgComponent, entity) in 
+                 SystemAPI.Query<RefRW<EnemyComponent>, RefRW<DamageComponent>>().WithEntityAccess())
         {
-            enemyComponent.ValueRW.HP -= config.PlayerDamage;
+            enemyComponent.ValueRW.HP -= dmgComponent.ValueRW.Damage;
+            ecb.RemoveComponent<DamageComponent>(entity);
+            if (enemyComponent.ValueRW.HP <= 0f)
+            {
+                ecb.AddComponent<DestroyComponent>(entity);
+            }
         }
-        // Remove Component
+        ecb.Playback(state.EntityManager);
+        ecb.Dispose();
     }
 }

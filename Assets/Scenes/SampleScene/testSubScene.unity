@@ -262,8 +262,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 8483076755818164738, guid: 920d61d5b52ac634788888375c2d7632, type: 3}
   NumberOfEnemy: 5
-  SpawnRate: 1000
-  Rows: 3
+  SpawnRate: 10
+  Rows: 1
   startPoint:
     x: 5
     y: 0
