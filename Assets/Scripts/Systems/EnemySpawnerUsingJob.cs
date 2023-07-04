@@ -1,4 +1,5 @@
 ﻿using Components;
+using UIScript;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -13,6 +14,7 @@ namespace Systems
         public void OnCreate(ref SystemState state)
         {
             state.RequireForUpdate<EnemySpawnerComponent>();
+            state.RequireForUpdate<StateGameCommand>();
         }
         public void OnUpdate(ref SystemState state)
         {
@@ -21,11 +23,11 @@ namespace Systems
             var prefab = enemySpawnerComponent.Prefab;
             
             // Query to count enemy
-            // EntityQuery enemyQuery;
-            // enemyQuery = state.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<EnemyComponent>());
-            // float numberEnemy = enemyQuery.CalculateEntityCount();
+            EntityQuery enemyQuery;
+            enemyQuery = state.EntityManager.CreateEntityQuery(ComponentType.ReadOnly<EnemyComponent>());
+            float numberEnemy = enemyQuery.CalculateEntityCount();
 
-            if (_lastSpawner < 0)
+            if (_lastSpawner < 0 && numberEnemy == 0)
             {
                 float enemyPerRow = enemySpawnerComponent.NumberOfEnemy;
                 float rows = enemySpawnerComponent.Rows;
@@ -35,14 +37,14 @@ namespace Systems
                 float3 endPoint = enemySpawnerComponent.endPoint;
                 
                 // Calculate the distance between 2 enemies
-                float3 distanceX = (startPoint - endPoint) / enemyPerRow;
-                float3 distanceZ = (startPoint - endPoint) / rows;
+                float3 distanceX = (endPoint - startPoint) / enemyPerRow;
+                float3 distanceY = (endPoint - startPoint) / rows;
                 state.Dependency = new EnemySpawnerJob
                 {
                     Ecb = ecb,
                     StartPoint = startPoint,
                     DistanceX = distanceX.x,
-                    DistanceZ = distanceZ.z,
+                    DistanceY = distanceY.y,
                     EnemyPerRow = enemyPerRow,
                     Rows = rows,
                     Prefab = prefab
@@ -60,7 +62,7 @@ namespace Systems
     {
         public float3 StartPoint;
         public float DistanceX;
-        public float DistanceZ;
+        public float DistanceY;
         public float EnemyPerRow;
         public float Rows;
         public EntityCommandBuffer Ecb;
@@ -74,7 +76,7 @@ namespace Systems
                 for (float i = 0f; i < EnemyPerRow; i++)
                 {
                     var e = Ecb.Instantiate(Prefab);
-                    var offset = new float3(DistanceX * i, 0, DistanceZ * row);
+                    var offset = new float3(DistanceX * i, DistanceY * row, 0);
 
                     Ecb.SetComponent(e, new LocalTransform{
                         Position = StartPoint + offset,

@@ -1,4 +1,5 @@
 using Components;
+using UIScript;
 using Unity.Entities;
 using Unity.Transforms;
 using UnityEngine;
@@ -7,6 +8,10 @@ namespace Systems
 {
     public partial struct ControlMovingSystem:ISystem
     {
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<StateGameCommand>();
+        }
         public void OnUpdate(ref SystemState state)
         {
             var horizontalInput = Input.GetAxis("Horizontal");

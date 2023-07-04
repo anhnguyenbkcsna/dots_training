@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Components
 {
-    public struct ScoreComponent : IComponentData
+    public partial struct ScoreComponent : IComponentData
     {
         public float point;
     }

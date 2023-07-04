@@ -5,7 +5,6 @@ using Unity.Physics;
 
 namespace Systems
 {
-    [UpdateInGroup(typeof(Unity.Entities.FixedStepSimulationSystemGroup))]
     [UpdateAfter(typeof(SimulationSystemGroup))] // Simulate then calculate collision
     public partial struct BulletCollideSystem:ISystem
     {

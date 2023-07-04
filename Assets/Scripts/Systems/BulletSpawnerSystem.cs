@@ -1,4 +1,5 @@
 using Components;
+using UIScript;
 using Unity.Entities;
 using Unity.Mathematics;
 using Unity.Transforms;
@@ -8,6 +9,11 @@ namespace Systems
 {
     public partial struct BulletSpawnerSystem : ISystem
     {
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<StateGameCommand>();
+        }
+
         public void OnUpdate(ref SystemState state)
         {
             var isPressedSpace = Input.GetKey(KeyCode.Space);
@@ -50,7 +56,8 @@ namespace Systems
         private float3 CalculateDirection(RefRO<LocalTransform> tf)
         {
             // return the forward direction of spawner
-            return tf.ValueRO.Forward();
-        }
+            // return tf.ValueRO.Forward();
+            return new float3(0, 1, 0);
+        }   
     }
 }
