@@ -5,7 +5,7 @@ using Unity.Physics;
 
 namespace Systems
 {
-    [UpdateInGroup(typeof(FixedStepSimulationSystemGroup))] // bring physics into 
+    [UpdateInGroup(typeof(Unity.Entities.FixedStepSimulationSystemGroup))]
     [UpdateAfter(typeof(SimulationSystemGroup))] // Simulate then calculate collision
     public partial struct BulletCollideSystem:ISystem
     {
@@ -14,6 +14,9 @@ namespace Systems
             state.RequireForUpdate<EnemyComponent>();
             state.RequireForUpdate<BulletComponent>();
             state.RequireForUpdate<SimulationSingleton>();
+            state.RequireForUpdate<Config>();
+            // ComponentLookup<EnemyComponent> TargetLookup = state.GetComponentLookup<EnemyComponent>();
+            // ComponentLookup<BulletComponent> BulletLookup = state.GetComponentLookup<BulletComponent>();
         }
         public struct JobCheckCollision: ITriggerEventsJob
         {
@@ -127,6 +130,8 @@ namespace Systems
             {
                 TargetLookup = state.GetComponentLookup<EnemyComponent>(),
                 BulletLookup = state.GetComponentLookup<BulletComponent>(),
+                // TargetLookup = TargetLookup,
+                // BulletLookup = BulletLookup,
                 Ecb = ecb,
                 Damage = config.PlayerDamage
             }.Schedule(SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);

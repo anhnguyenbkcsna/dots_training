@@ -170,6 +170,74 @@ MonoBehaviour:
   level: 1
   enemyDamage: 4
   playerDamage: 1
+--- !u!1 &971569826
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 971569829}
+  - component: {fileID: 971569828}
+  - component: {fileID: 971569827}
+  m_Layer: 0
+  m_Name: EventSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &971569827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971569826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f231c4fb786f3946a6b90b886c48677, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+  m_InputActionsPerSecond: 10
+  m_RepeatDelay: 0.5
+  m_ForceModuleActive: 0
+--- !u!114 &971569828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971569826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!4 &971569829
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971569826}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1203852425
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,6 +284,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1288414765 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 827150551542422594, guid: 43e0c23f4828f2141ae7e1466d899833, type: 3}
+  m_PrefabInstance: {fileID: 6866965891080559369}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1288414775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1288414765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32b6ffb5d00c4ac8aeef37b02b1da99d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1522592930
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,15 +346,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8483076755818164738, guid: 920d61d5b52ac634788888375c2d7632, type: 3}
-  NumberOfEnemy: 5
+  NumberOfEnemy: 20
   SpawnRate: 10
-  Rows: 1
+  Rows: 2
   startPoint:
-    x: 5
+    x: 15
     y: 0
     z: 6
   endPoint:
-    x: 15
+    x: 45
     y: 0
     z: 0
 --- !u!1001 &6866965891080559369
@@ -363,5 +448,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 827150551542422594, guid: 43e0c23f4828f2141ae7e1466d899833, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1288414775}
   m_SourcePrefab: {fileID: 100100000, guid: 43e0c23f4828f2141ae7e1466d899833, type: 3}
