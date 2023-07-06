@@ -3,9 +3,9 @@ using Unity.Entities;
 
 namespace UIScript
 {
-    public struct StateGameCommand : IComponentData, IMessageComponent
+    public partial struct StartGameCommand : IComponentData, IMessageComponent
     {
-        public float State {
+        public bool Start {
             get;
             set;
         }

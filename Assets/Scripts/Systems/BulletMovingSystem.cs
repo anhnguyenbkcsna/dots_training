@@ -1,4 +1,5 @@
 using Components;
+using UIScript;
 using Unity.Entities;
 using Unity.Transforms;
 
@@ -6,6 +7,11 @@ namespace Systems
 {
     public partial struct BulletMovingSystem : ISystem
     {
+        public void OnCreate(ref SystemState state)
+        {
+            state.RequireForUpdate<StartGameCommand>();
+            state.RequireForUpdate<ContinueGameCommand>();
+        }
         public void OnUpdate(ref SystemState state)
         {
             new MovingJob { deltaTime = SystemAPI.Time.DeltaTime }.ScheduleParallel();

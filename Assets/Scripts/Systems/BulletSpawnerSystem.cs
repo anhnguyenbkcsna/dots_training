@@ -11,7 +11,8 @@ namespace Systems
     {
         public void OnCreate(ref SystemState state)
         {
-            state.RequireForUpdate<StateGameCommand>();
+            state.RequireForUpdate<StartGameCommand>();
+            state.RequireForUpdate<ContinueGameCommand>();
         }
 
         public void OnUpdate(ref SystemState state)

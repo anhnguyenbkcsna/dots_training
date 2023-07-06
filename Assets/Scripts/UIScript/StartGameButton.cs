@@ -30,9 +30,17 @@ namespace UIScript
                 .PrepareMessage()
                 .AliveForUnlimitedTime() // Set alive for whole game
                 .PostImmediate(entityManager,
-                    new StateGameCommand
+                    new StartGameCommand
                     {
-                        State = 1
+                        Start = true
+                    });
+            MessageBroadcaster
+                .PrepareMessage()
+                .AliveForUnlimitedTime() // Set alive for whole game
+                .PostImmediate(entityManager,
+                    new ContinueGameCommand()
+                    {
+                        Continue = true
                     });
             this.gameObject.SetActive(false);
         }

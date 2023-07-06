@@ -1,9 +1,8 @@
-﻿using System;
-using CortexDeveloper.ECSMessages.Service;
+﻿using CortexDeveloper.ECSMessages.Service;
 using Unity.Entities;
 using UnityEngine;
 
-namespace UIScript
+namespace UIScript 
 {
     public class UIExampleBootstrap : MonoBehaviour
     {
@@ -14,7 +13,7 @@ namespace UIScript
         private void Awake()
         {
             InitializeMessageBroadcaster();
-            CreateSystems();
+            CreateExampleSystems();
         }
 
         private void OnDestroy()
@@ -23,7 +22,7 @@ namespace UIScript
                 return;
 
             DisposeMessageBroadcaster();
-            RemoveSystem();
+            RemoveExampleSystem();
         }
 
         private void InitializeMessageBroadcaster()
@@ -39,15 +38,16 @@ namespace UIScript
         {
             MessageBroadcaster.DisposeFromWorld(_world);    
         }
-
-        private void CreateSystems()
+        private void CreateExampleSystems()
         {
-            _simulationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<StateGameSystem>());
+            _simulationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<StartGameSystem>());
+            _simulationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PauseGameSystem>());
         }
         
-        private void RemoveSystem()
+        private void RemoveExampleSystem()
         {
-            _simulationSystemGroup.RemoveSystemFromUpdateList(_world.GetExistingSystem<StateGameSystem>());
+            _simulationSystemGroup.RemoveSystemFromUpdateList(_world.GetExistingSystem<StartGameSystem>());
+            _simulationSystemGroup.RemoveSystemFromUpdateList(_world.GetExistingSystem<PauseGameSystem>());
         }
     }
 }
