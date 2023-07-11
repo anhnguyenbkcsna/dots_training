@@ -12,6 +12,7 @@ namespace Components
         public float Rows;
         public float3 startPoint;
         public float3 endPoint;
+        public float Direction;
         public class EnemySpawnerComponentBaker : Baker<EnemySpawnerAuthoring>
         {
             public override void Bake(EnemySpawnerAuthoring authoring)
@@ -25,7 +26,8 @@ namespace Components
                         SpawnRate = authoring.SpawnRate,
                         Rows = authoring.Rows,
                         startPoint = authoring.startPoint,
-                        endPoint = authoring.endPoint
+                        endPoint = authoring.endPoint,
+                        Direction = authoring.Direction
                     });
             }
         }

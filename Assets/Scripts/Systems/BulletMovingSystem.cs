@@ -14,15 +14,25 @@ namespace Systems
         }
         public void OnUpdate(ref SystemState state)
         {
-            new MovingJob { deltaTime = SystemAPI.Time.DeltaTime }.ScheduleParallel();
+            new PlayerBulletMovingJob { deltaTime = SystemAPI.Time.DeltaTime }.ScheduleParallel();
+            new EnemyBulletMovingJob { deltaTime = SystemAPI.Time.DeltaTime }.ScheduleParallel();
         }
 
 
-        public partial struct MovingJob : IJobEntity
+        public partial struct PlayerBulletMovingJob : IJobEntity
         {
             public float deltaTime;
 
             void Execute(RefRW<LocalTransform> tf, RefRO<BulletComponent> bullet)
+            {
+                tf.ValueRW.Position += bullet.ValueRO.direction * bullet.ValueRO.speed * deltaTime;
+            }
+        }
+        public partial struct EnemyBulletMovingJob : IJobEntity
+        {
+            public float deltaTime;
+
+            void Execute(RefRW<LocalTransform> tf, RefRO<EnemyBulletComponent> bullet)
             {
                 tf.ValueRW.Position += bullet.ValueRO.direction * bullet.ValueRO.speed * deltaTime;
             }

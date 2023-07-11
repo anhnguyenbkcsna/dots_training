@@ -5,7 +5,7 @@ using Unity.Physics;
 
 namespace Systems
 {
-    [UpdateAfter(typeof(SimulationSystemGroup))] // Simulate then calculate collision
+    // [UpdateAfter(typeof(SimulationSystemGroup))] // Simulate then calculate collision
     public partial struct BulletCollideSystem:ISystem
     {
         public void OnCreate(ref SystemState state)
@@ -56,7 +56,7 @@ namespace Systems
                             
                             Ecb.AddComponent(triggerEvent.EntityA, new DamageComponent
                             {
-                                Damage = Damage
+                                EnemyDamage = Damage
                                 // TargetEntity = triggerEvent.EntityA,
                                 // BulletEntity = triggerEvent.EntityB
                             });
@@ -70,7 +70,7 @@ namespace Systems
                         {
                             Ecb.AddComponent(triggerEvent.EntityB, new DamageComponent
                             {
-                                Damage = Damage
+                                EnemyDamage = Damage
                                 // TargetEntity = triggerEvent.EntityB,
                                 // BulletEntity = triggerEvent.EntityA
                             });

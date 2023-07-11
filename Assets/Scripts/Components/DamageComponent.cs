@@ -6,6 +6,7 @@ namespace Components
     {
         // public Entity TargetEntity;
         // public Entity BulletEntity;
-        public float Damage;
+        public float PlayerDamage;
+        public float EnemyDamage;
     }
 }

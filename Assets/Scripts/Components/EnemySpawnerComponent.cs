@@ -11,5 +11,6 @@ namespace Components
         public float Rows;
         public float3 startPoint;
         public float3 endPoint;
+        public float Direction; // -1 is left, 1 is right
     }
 }

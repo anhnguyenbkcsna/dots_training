@@ -47,7 +47,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 827150551542422594}
-  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300002, guid: 47365cc78e5cfad41badc534e3d2b7e1, type: 3}
 --- !u!23 &6520286189587059280
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -102,8 +102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8eee7b3dfb724150842422746168231a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinX: -20
-  MaxX: 20
+  MinX: -30
+  MaxX: 30
 --- !u!114 &5200028610620951566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -116,7 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51a4959355104962b9b28b180bf94d6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 3
+  MoveSpeed: 5
 --- !u!114 &2434272421202940442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36988b96634c4907bcb5f0eb11542633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 0
+  hp: 2
 --- !u!136 &61578048755213651
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0344a1445cf34809964d1eff7023f917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Prefab: {fileID: 0}
+  Prefab: {fileID: 1476541790649766558, guid: 1a1d8d820d8b9ae4eb74126423432e05, type: 3}
   Speed: 50
   SpawnSpeed: 0.5
 --- !u!54 &5723750648174463895

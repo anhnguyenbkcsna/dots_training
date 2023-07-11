@@ -15,17 +15,24 @@ namespace Systems
         }
         public void OnUpdate(ref SystemState state)
         {
-            foreach (var (tf, moving, range) in SystemAPI.Query<RefRW<LocalTransform>
-                         , RefRO<MovingComponent>, RefRO<MovingRange>>().WithNone<ControlledMovingComponent>())
+            foreach (var direction in SystemAPI.Query<RefRW<EnemySpawnerComponent>>())
             {
-                tf.ValueRW.Position.y -= moving.ValueRO.moveSpeed * SystemAPI.Time.DeltaTime;
-                if (tf.ValueRW.Position.y < range.ValueRO.minAxis)
+                foreach (var (tf, moving, range) in SystemAPI.Query<RefRW<LocalTransform>
+                             , RefRO<MovingComponent>, RefRO<MovingRange>>().WithNone<ControlledMovingComponent>())
                 {
-                    tf.ValueRW.Position.y = range.ValueRO.maxAxis;
-                }
-                 if (tf.ValueRW.Position.y > range.ValueRO.maxAxis)
-                {
-                    tf.ValueRW.Position.y = range.ValueRO.minAxis;
+                    tf.ValueRW.Position.x += moving.ValueRO.moveSpeed * SystemAPI.Time.DeltaTime * direction.ValueRW.Direction;
+                    if (tf.ValueRW.Position.x < range.ValueRO.minAxis)
+                    {
+                        Debug.Log("Change direction - min");
+                        tf.ValueRW.Position.x = range.ValueRO.minAxis;
+                        direction.ValueRW.Direction = -direction.ValueRW.Direction;
+                    }
+                    if (tf.ValueRW.Position.x > range.ValueRO.maxAxis)
+                    {
+                        Debug.Log("Change direction - max");
+                        tf.ValueRW.Position.x = range.ValueRO.maxAxis;
+                        direction.ValueRW.Direction = -direction.ValueRW.Direction;
+                    }
                 }
             }
         }

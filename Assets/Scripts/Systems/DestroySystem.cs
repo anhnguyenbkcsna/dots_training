@@ -17,15 +17,6 @@ namespace Systems
             {
                 _ecb.DestroyEntity(entity);
             }
-
-            // foreach (var (enemyComponent, e) in SystemAPI.Query<RefRO<EnemyComponent>>().WithEntityAccess())
-            // {
-            //     
-            //     if (enemyComponent.ValueRO.HP <= 0f)
-            //     {
-            //         _ecb.DestroyEntity(e);
-            //     }
-            // }
             _ecb.Playback(state.EntityManager);
             _ecb.Dispose();
         }
