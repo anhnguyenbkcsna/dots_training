@@ -1,6 +1,7 @@
 ﻿using Components;
 using Unity.Collections;
 using Unity.Entities;
+using UnityEngine;
 
 public partial struct CalculateDamageSystem : ISystem
 {
@@ -34,12 +35,12 @@ public partial struct CalculateDamageSystem : ISystem
         foreach (var (playerComponent, dmgComponent, entity) in SystemAPI
                      .Query<RefRW<ControlledMovingComponent>, RefRW<DamageComponent>>().WithEntityAccess())
         {
-            playerComponent.ValueRW.HP -= dmgComponent.ValueRW.EnemyDamage;
+            playerComponent.ValueRW.HP -= dmgComponent.ValueRW.PlayerDamage;
             ecb.RemoveComponent<DamageComponent>(entity);
             if (playerComponent.ValueRW.HP <= 0f)
             {
-                // ecb.AddComponent<DestroyComponent>(entity);
-                // Do something
+                // ecb.RemoveComponent<ControlledMovingComponent>(entity);
+                // TO DO
             }
         }
         ecb.Playback(state.EntityManager);

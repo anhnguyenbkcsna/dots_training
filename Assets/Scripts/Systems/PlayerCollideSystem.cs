@@ -62,40 +62,33 @@ namespace Systems
                     // Player Receive Damage
                     if (isPlayerA)
                     {
-                        if (PlayerLookup.IsComponentEnabled(triggerEvent.EntityA))
+                        Ecb.AddComponent(triggerEvent.EntityA, new DamageComponent
                         {
-                            
-                            Ecb.AddComponent(triggerEvent.EntityA, new DamageComponent
-                            {
-                                PlayerDamage = Damage
-                            });
-                        }
+                            PlayerDamage = Damage
+                        });
                     }
                     else
                     {
-                        if (PlayerLookup.IsComponentEnabled(triggerEvent.EntityB))
+                        Ecb.AddComponent(triggerEvent.EntityB, new DamageComponent
                         {
-                            Ecb.AddComponent(triggerEvent.EntityB, new DamageComponent
-                            {
-                                PlayerDamage = Damage
-                            });
-                        }
+                            PlayerDamage = Damage
+                        });
                     }
                     // ----- Bullet -----
                     if (isEnemyBulletA)
                     {
-                        // if (EnemyBulletLookup.IsComponentEnabled((triggerEvent.EntityA)))
-                        // {
-                        //     EnemyBulletLookup.SetComponentEnabled(triggerEvent.EntityA, false);
-                        // }
+                        if (EnemyBulletLookup.IsComponentEnabled((triggerEvent.EntityA)))
+                        {
+                            EnemyBulletLookup.SetComponentEnabled(triggerEvent.EntityA, false);
+                        }
                         destroyableA = true;
                     }
                     else
                     {
-                        // if (EnemyBulletLookup.IsComponentEnabled((triggerEvent.EntityB)))
-                        // {
-                        //     EnemyBulletLookup.SetComponentEnabled(triggerEvent.EntityB, false);
-                        // }    
+                        if (EnemyBulletLookup.IsComponentEnabled((triggerEvent.EntityB)))
+                        {
+                            EnemyBulletLookup.SetComponentEnabled(triggerEvent.EntityB, false);
+                        }    
                         destroyableB = true;
                     }
                     

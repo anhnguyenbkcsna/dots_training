@@ -66,7 +66,7 @@ namespace Systems
                     state.EntityManager.SetComponentData(newBulletE, new LocalTransform
                     {
                         Position = tf.ValueRO.Position,
-                        Scale = 1f,
+                        Scale = 1.5f,
                         Rotation = Quaternion.identity,
                     });
                     // Set direction for bullet
